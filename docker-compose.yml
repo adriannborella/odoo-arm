@@ -18,7 +18,8 @@ services:
       - db
     command: /opt/odoo/odoo-server/odoo-bin -c /home/odoo/config/odoo-server.conf
     ports:
-      - "9093:8069"
+      - "8069:8069"
+      - "8072:8072"
     environment:
       - DB_HOST=db
       - DB_PORT=5432
@@ -31,6 +32,17 @@ services:
       - ./odoo-conf:/home/odoo/config
       - ./data-dir:/home/odoo/data_dir
     stdin_open: true
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+        - 80:80
+        - 443:443
+    volumes:
+        - ./nginx/conf:/etc/nginx/conf.d
+    depends_on:
+      - odoo
 
 volumes:
   odoo-db-data:
