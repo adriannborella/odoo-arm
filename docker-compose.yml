@@ -32,32 +32,6 @@ services:
       - ./odoo-conf:/home/odoo/config
       - ./data-dir:/home/odoo/data_dir
     stdin_open: true
-  nginx:
-    container_name: nginx
-    image: nginx:latest
-    restart: unless-stopped
-    environment:
-      - DOMAIN:viconsultorarrhh.com.ar
-    ports:
-        - 80:80
-        - 443:443
-    volumes:
-        - ./nginx/conf:/etc/nginx/conf.d
-        - ./etc/letsencrypt:/etc/letsencrypt:ro # mounting the folder to the nginx container 
-    depends_on:
-      - odoo
-  certbot:
-    container_name: certbot
-    image: certbot/certbot:latest
-    depends_on:
-      - nginx
-    command: >-
-             certonly --reinstall --webroot --webroot-path=/var/www/certbot
-             --email adriannborella@gmail.com --agree-tos --no-eff-email
-             -d viconsultorarrhh.com.ar
-    volumes:
-      - ./etc/letsencrypt:/etc/letsencrypt
-      - ./certbot/data:/var/www/certbot
 
 volumes:
   odoo-db-data:

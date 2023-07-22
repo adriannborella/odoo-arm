@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    restart: unless-stopped
+  odoo:
+    restart: unless-stopped
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: unless-stopped
+    ports:
+        - 80:80
+        - 443:443
+    volumes:
+        - ./production/nginx/conf/:/etc/nginx/conf.d/:ro        
+        - ./production/certbot/www:/var/www/certbot/:ro
+        - ./production/certbot/conf/:/etc/nginx/ssl/:ro
+    depends_on:
+      - odoo
+  # certbot:
+  #   image: certbot/certbot:v2.6.0
+  #   command: certonly --webroot --webroot-path /var/www/certbot/ -d viconsultorarrhh.com.ar -m adriannborella@gmail.com
+  #   # command: /bin/bash
+  #   volumes:
+  #     - ./production/certbot/www:/var/www/certbot/:rw
+  #     - ./production/certbot/conf:/etc/letsencrypt:rw
+  #   stdin_open: true
+
+volumes:
+  odoo-db-data:
