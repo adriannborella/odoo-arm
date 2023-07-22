@@ -14,11 +14,15 @@ services:
         - 80:80
         - 443:443
     volumes:
-        - ./production/nginx/conf/:/etc/nginx/conf.d/:ro        
+        - ./production/nginx/conf/:/etc/nginx/conf.d/:ro  
+        - ./production/nginx/sites/:/etc/nginx/sites-available/:ro  
+        - ./production/nginx/sites/:/etc/nginx/sites-enabled/:ro  
         - ./production/certbot/www:/var/www/certbot/:ro
         - ./production/certbot/conf/:/etc/nginx/ssl/:ro
     depends_on:
       - odoo
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   # certbot:
   #   image: certbot/certbot:v2.6.0
   #   command: certonly --webroot --webroot-path /var/www/certbot/ -d viconsultorarrhh.com.ar -m adriannborella@gmail.com
