@@ -16,8 +16,9 @@ services:
       dockerfile: ./DockerFile
     depends_on:
       - db
+    command: /opt/odoo/odoo-server/odoo-bin -c /home/odoo/config/odoo-server.conf
     ports:
-      - "8069:8069"
+      - "9093:8069"
     environment:
       - DB_HOST=db
       - DB_PORT=5432
@@ -28,6 +29,7 @@ services:
       - ./odoo-data:/var/lib/odoo
       - ./odoo-addons:/mnt/extra-addons
       - ./odoo-conf:/home/odoo/config
+      - ./data-dir:/home/odoo/data_dir
     stdin_open: true
 
 volumes:
